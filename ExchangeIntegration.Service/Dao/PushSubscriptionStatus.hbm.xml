@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true">
+  <class name="ExchangeIntegration.Service.Dao.PushSubscriptionStatus, ExchangeIntegration.Service" lazy="true">
+    <id name="Id">
+      <generator class="native" />
+    </id>
+    <property name="Alias" column="Alias" />
+    <property name="Active" column="Active" />
+    <property name="SubscriptionId" column="SubscriptionId" />
+    <property name="Watermark" column="Watermark" />
+    <property name="CreatedDate" column="CreatedDate" />
+    <property name="LastUpdate" column="LastUpdate" />
+    <property name="LastEventReceived" column="LastEventReceived" />
+    <property name="ExpectedNextUpdate" column="ExpectedNextUpdate" />
+    <property name="Account" column="Account" />
+  </class>
+</hibernate-mapping>
