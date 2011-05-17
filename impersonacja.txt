@@ -1,0 +1,5 @@
+Add-ADPermission -Identity (Get-ExchangeServer -Identity vmex03).DistinguishedName -User atmosfera -extendedRight ms-Exch-EPI-Impersonation
+
+Add-ADPermission -Identity "CN=Rafal Gwizdala,CN=Users,DC=cogit2,DC=pl" -User atmosfera -extendedRight ms-Exch-EPI-May-Impersonate
+
+no i dzia³a!!!

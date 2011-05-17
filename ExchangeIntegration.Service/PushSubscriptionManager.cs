@@ -8,6 +8,7 @@ using System.Data;
 using ExchangeIntegration.Interfaces;
 using NHibernate;
 using ExchangeIntegration.Service.Dao;
+using Newtonsoft.Json;
 
 namespace ExchangeIntegration.Service
 {
@@ -156,6 +157,8 @@ namespace ExchangeIntegration.Service
                 ps.ExpectedNextUpdate = DateTime.Now.AddMinutes(2 * StatusNotificationFreqMinutes);
                 ps.LastEventReceived = DateTime.Now;
                 ps.LastUpdate = DateTime.Now;
+                ps.RecipientEndpoint = receiverMessageEndpoint;
+                ps.SubscriptionRequestJson = JsonConvert.SerializeObject(a);
                 s.Save(ps);
                 s.Flush();
                 return r.Id;

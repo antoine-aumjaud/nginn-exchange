@@ -13,5 +13,7 @@
     <property name="LastEventReceived" column="LastEventReceived" />
     <property name="ExpectedNextUpdate" column="ExpectedNextUpdate" />
     <property name="Account" column="Account" />
+    <property name="RecipientEndpoint" column="RecipientEndpoint" />
+    <property name="SubscriptionRequestJson" column="SubscriptionRequestJson" />
   </class>
 </hibernate-mapping>

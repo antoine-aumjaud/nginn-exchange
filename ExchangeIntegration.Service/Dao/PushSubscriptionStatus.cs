@@ -16,6 +16,14 @@ namespace ExchangeIntegration.Service.Dao
         public virtual DateTime LastEventReceived { get; set; }
         public virtual DateTime ExpectedNextUpdate { get; set; }
         public virtual bool Active { get; set; }
+        /// <summary>
+        /// exchange account name
+        /// </summary>
         public virtual string Account { get; set; }
+        /// <summary>
+        /// message bus endpoint of the event recipient
+        /// </summary>
+        public virtual string RecipientEndpoint { get; set; }
+        public virtual string SubscriptionRequestJson { get; set; }
     }
 }
