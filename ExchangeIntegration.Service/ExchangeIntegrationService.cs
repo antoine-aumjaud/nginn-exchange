@@ -68,57 +68,77 @@ namespace ExchangeIntegration.Service
             };
         }
 
-        public void CreateTask()
+        
+
+        protected void InitializeBaseItem(Item it, CreateItemMessage msg)
         {
-            ExchangeService es = Connect();
-            Task tsk = new Task(es);
-            //tsk.AllowedResponseActions = ResponseActions.Accept | ResponseActions.Decline;
-            
-        }
-
-
-        public ItemCreated SendEmail(SendEmailMessage msg)
-        {
-            ExchangeService es = Connect();
-            if (!string.IsNullOrEmpty(msg.ImpersonateUser)) es.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, msg.ImpersonateUser);
-
-            EmailMessage em = new EmailMessage(es);
-            em.Subject = msg.Subject;
-            foreach(string s in msg.Recipients)
-                em.ToRecipients.Add(s);
-            em.Body = msg.Body;
+            it.Subject = string.Format("{0}: {1} {2}", msg.Subject, DateTime.Now, msg.CorrelationId);
+            it.Body = new MessageBody(msg.Body.StartsWith("<html", StringComparison.InvariantCultureIgnoreCase) ? BodyType.HTML : BodyType.Text, msg.Body);
             ExtendedPropertyDefinition epd = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.InternetHeaders, "X-CorrelationId", MapiPropertyType.String);
-            em.SetExtendedProperty(epd, msg.CorrelationId);
-            em.IsDeliveryReceiptRequested = true;
-            
-            em.SendAndSaveCopy();
-            log.Info("Sent email to {2} ({3}). Item id: {0}. Iternet Id: {1}", em.Id, em.InternetMessageId, em.DisplayTo, em.Subject);
-            return new ItemCreated
+            it.SetExtendedProperty(epd, msg.CorrelationId);
+            it.IsReminderSet = true;
+            if (msg.ReminderDate.HasValue)
             {
-                UniqueId = em.Id.UniqueId,
-                InternetMessageId = em.InternetMessageId,
-                CorrelationId = msg.CorrelationId
-            };
+                it.ReminderDueBy = msg.ReminderDate.Value;
+                it.IsReminderSet = true;
+            }
+            if (msg.AttachmentFiles != null)
+            {
+                foreach (string file in msg.AttachmentFiles)
+                {
+                    FileAttachment fat = it.Attachments.AddFileAttachment(file);
+                    log.Info("Added an attachment: {0}", fat.Name);
+                }
+            }
         }
 
+        
 
         public ItemCreated CreateTask(CreateTask msg)
         {
-            ExchangeService es = Connect();
-            if (!string.IsNullOrEmpty(msg.ImpersonateUser)) es.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, msg.ImpersonateUser);
-
+            ExchangeService es = ConnectAndImpersonate(msg.ImpersonateUser);
             Task tsk = new Task(es);
-            tsk.Body = msg.Body;
-            tsk.Subject = msg.Subject;
-            tsk.DueDate = msg.Deadline;
-            tsk.Save();
+            InitializeBaseItem(tsk, msg);
+            tsk.StartDate = msg.StartDate;
+            tsk.DueDate = msg.EndDate;
+            
+
+            return null;
+        }
+
+        public ItemCreated SendEmail(SendEmailMessage msg)
+        {
+            ExchangeService es = ConnectAndImpersonate(msg.ImpersonateUser);
+            
+            EmailMessage em = new EmailMessage(es);
+            InitializeBaseItem(em, msg);
+            
+            foreach(string s in msg.Recipients)
+                em.ToRecipients.Add(s);
+            
+            em.IsDeliveryReceiptRequested = msg.DeliveryReceipt;
+            em.IsReadReceiptRequested = msg.ReadReceipt;
+
+            
+            if (msg.SaveMode == SaveModes.SaveOnly || msg.SaveMode == SaveModes.SaveAndSend)
+            {
+                em.Save(new FolderId(msg.WellKnownFolderName));
+            }
+            
+            if (msg.SaveMode == SaveModes.SendOnly || msg.SaveMode == SaveModes.SaveAndSend)
+            {
+                em.Send();
+            }
+            //log.Info("Sent email to {2} ({3}). Item id: {0}. Iternet Id: {1}", em.Id, em.InternetMessageId, em.DisplayTo, em.Subject);
             return new ItemCreated
             {
-                UniqueId = tsk.Id.UniqueId,
-                InternetMessageId = null,
+                UniqueId = em.Id == null ? null : em.Id.UniqueId,
                 CorrelationId = msg.CorrelationId
             };
         }
+
+
+        
 
 
         public void DeleteItem(string itemId)
@@ -135,7 +155,7 @@ namespace ExchangeIntegration.Service
         public ExchangeService ConnectAndImpersonate(string userEmail)
         {
             var es = Connect();
-            es.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, userEmail);
+            if (!string.IsNullOrEmpty(userEmail)) es.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, userEmail);
             return es;
         }
     }

@@ -27,7 +27,7 @@
       </MoreEvents>
       <IsError>false</IsError>
       <Events>
-        <xsl:apply-templates select="t:ModifiedEvent|t:CreatedEvent" />
+        <xsl:apply-templates select="t:ModifiedEvent|t:CreatedEvent|t:NewMailEvent" />
       </Events>
     </SubscriptionEventNotification>
   </xsl:template>
@@ -45,6 +45,15 @@
       <xsl:call-template name="Ebase" />
     </BaseExchangeEvent>
   </xsl:template>
+
+  <xsl:template match="t:NewMailEvent">
+    <BaseExchangeEvent>
+      <EventType>NewMail</EventType>
+      <xsl:call-template name="Ebase" />
+    </BaseExchangeEvent>
+  </xsl:template>
+
+
 
   <xsl:template name="Ebase">
     <TimeStamp>

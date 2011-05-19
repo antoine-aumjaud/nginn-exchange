@@ -249,8 +249,13 @@ namespace ExchangeIntegration.Service
         protected void HandleItemEvent(BaseExchangeEvent ev, SubscriptionEventNotification n, ExchangeService es)
         {
             Item it = Item.Bind(es, new ItemId(ev.ItemId));
-            
             log.Info("Item event: {0}. Item class: {1} ({3}), Id: {2}", ev.EventType, it.ItemClass, it.Id, it.GetType().Name);
+            ExtendedPropertyDefinition epd = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.InternetHeaders, "X-CorrelationId", MapiPropertyType.String);
+            it.Load(new PropertySet(epd));
+            foreach (ExtendedProperty ep in it.ExtendedProperties)
+            {
+                log.Info("PROP: {0}={1}", ep.PropertyDefinition.Name, ep.Value);
+            }
             List<object> messages = new List<object>();
             if (ev.EventType == ExchangeEventType.Created)
             {

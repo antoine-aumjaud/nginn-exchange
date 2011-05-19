@@ -25,7 +25,7 @@ namespace Testing
             {
                 NLog.Config.SimpleConfigurator.ConfigureForConsoleLogging();
                 ConfigureMessageBus();
-                //TestSendEmail();
+                TestSendEmail();
                 //TestCreateItem();
                 //TestGetItems();
                 //TestRaw();
@@ -109,7 +109,10 @@ namespace Testing
                 Recipients = new string[] { "rafalg@cogit2.pl" },
                 CorrelationId = Guid.NewGuid().ToString(),
                 Body = "<html><h1>MOJA WIADOMOSC</h1> <b>jest straszna</b></html>",
-                SaveMode = SaveModes.SendOnly
+                SaveMode = SaveModes.SendOnly,
+                AttachmentFiles = new string[] {"c:\\dev\\dump.txt" },
+                DeleteAttachments = false,
+                ReminderDate = DateTime.Now.AddMinutes(2)
             }).Send("sql://exch/MQ_ExchangeIntegration");
         }
 
@@ -122,6 +125,14 @@ namespace Testing
                 EventTypes = new string[] {"Created", "Modified", "Deleted"},
                 FolderIds = new string[] {"Calendar", "Tasks"},
                 SubscriptionAlias = "rafalg_S1"
+            }).Send("sql://exch/MQ_ExchangeIntegration");
+
+            mb.NewMessage(new AddSubscription
+            {
+                AccountName = "rafalg@cogit2.pl",
+                EventTypes = new string[] { "NewMail" },
+                FolderIds = new string[] { "Inbox" },
+                SubscriptionAlias = "incoming_email"
             }).Send("sql://exch/MQ_ExchangeIntegration");
         }
     }

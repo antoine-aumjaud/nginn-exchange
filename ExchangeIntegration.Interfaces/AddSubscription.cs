@@ -26,6 +26,11 @@ namespace ExchangeIntegration.Interfaces
         /// Event types to monitor for (Created, Modified, Deleted, NewMail, ...)
         /// </summary>
         public string[] EventTypes { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("AddSubscription:{0}/{1}", SubscriptionAlias, AccountName);
+        }
     }
 
     /// <summary>
@@ -36,6 +41,11 @@ namespace ExchangeIntegration.Interfaces
         public string AccountName { get; set; }
         public string SubscriptionAlias { get; set; }
         public string SubscriptionId { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:{1}", GetType().Name, SubscriptionId);
+        }
     }
 
     /// <summary>

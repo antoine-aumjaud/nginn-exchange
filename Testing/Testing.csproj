@@ -36,13 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core">
-      <HintPath>..\..\..\ExternalLib\Other\Castle.Core.dll</HintPath>
+      <HintPath>..\extlib\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
-      <HintPath>..\..\..\ExternalLib\Other\Castle.Windsor.dll</HintPath>
+      <HintPath>..\extlib\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Exchange.WebServices">
-      <HintPath>..\..\..\ExternalLib\Other\Microsoft.Exchange.WebServices.dll</HintPath>
+      <HintPath>..\extlib\Microsoft.Exchange.WebServices.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -57,14 +57,13 @@
       <HintPath>..\extlib\NGinnBPM.MessageBus.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
-      <HintPath>..\..\..\ExternalLib\Other\NLog.dll</HintPath>
+      <HintPath>..\extlib\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
