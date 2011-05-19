@@ -10,7 +10,8 @@ namespace ExchangeIntegration.Service
     public class MessageHandler : 
         IMessageConsumer<CreateCalendarItem>,
         IMessageConsumer<SendEmailMessage>,
-        IMessageConsumer<AddSubscription>
+        IMessageConsumer<AddSubscription>,
+        IMessageConsumer<ReplyToMessage>
     {
         public IMessageBus MessageBus { get; set; }
         public IExchangeIntegrationService Exchange { get; set; }
@@ -37,6 +38,11 @@ namespace ExchangeIntegration.Service
                 SubscriptionId = id
             };
             MessageBus.Reply(sc);
+        }
+
+        public void Handle(ReplyToMessage message)
+        {
+            this.Exchange.ReplyToMessage(message);
         }
     }
 }

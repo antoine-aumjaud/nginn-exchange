@@ -13,6 +13,7 @@ namespace ExchangeIntegration.Service
         ItemCreated SendEmail(SendEmailMessage msg);
         ItemCreated CreateTask(CreateTask msg);
         void DeleteItem(string itemId);
+        void ReplyToMessage(ReplyToMessage msg);
     }
 
     public interface IExchangeConnect

@@ -68,12 +68,15 @@ namespace ExchangeIntegration.Service
             };
         }
 
-        
+        private MessageBody ToBody(string s)
+        {
+            return new MessageBody(s.StartsWith("<html", StringComparison.InvariantCultureIgnoreCase) ? BodyType.HTML : BodyType.Text, s);
+        }
 
         protected void InitializeBaseItem(Item it, CreateItemMessage msg)
         {
             it.Subject = string.Format("{0}: {1} {2}", msg.Subject, DateTime.Now, msg.CorrelationId);
-            it.Body = new MessageBody(msg.Body.StartsWith("<html", StringComparison.InvariantCultureIgnoreCase) ? BodyType.HTML : BodyType.Text, msg.Body);
+            it.Body = ToBody(msg.Body);
             ExtendedPropertyDefinition epd = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.InternetHeaders, "X-CorrelationId", MapiPropertyType.String);
             it.SetExtendedProperty(epd, msg.CorrelationId);
             it.IsReminderSet = true;
@@ -106,10 +109,27 @@ namespace ExchangeIntegration.Service
             return null;
         }
 
+        public void ReplyToMessage(ReplyToMessage msg)
+        {
+            ExchangeService es = ConnectAndImpersonate(msg.ImpersonateUser);
+            var it = Item.Bind(es, msg.ReplyToItemId);
+            if (it is EmailMessage)
+            {
+                var em = it as EmailMessage;
+                em.Reply(ToBody(msg.Body), msg.ReplyAll);
+            }
+        }
+
         public ItemCreated SendEmail(SendEmailMessage msg)
         {
             ExchangeService es = ConnectAndImpersonate(msg.ImpersonateUser);
-            
+
+            if (!string.IsNullOrEmpty(msg.ReplyToItemId))
+            {
+                var it = Item.Bind(es, msg.ReplyToItemId);
+                EmailMessage m1 = (EmailMessage)it;
+                ResponseMessage rm = m1.CreateReply(true);
+            }
             EmailMessage em = new EmailMessage(es);
             InitializeBaseItem(em, msg);
             

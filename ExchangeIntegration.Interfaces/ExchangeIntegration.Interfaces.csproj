@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddSubscription.cs" />
+    <Compile Include="BaseItem.cs" />
     <Compile Include="CalendarItemMoved.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="CreateCalendarItem.cs" />

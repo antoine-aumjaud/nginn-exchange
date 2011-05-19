@@ -259,16 +259,23 @@ namespace ExchangeIntegration.Service
             List<object> messages = new List<object>();
             if (ev.EventType == ExchangeEventType.Created)
             {
-                messages.Add(new ItemCreated
+                /*messages.Add(new ItemCreated
                 {
                     UniqueId = it.Id.UniqueId
-                });
+                });*/
             }
             else if (ev.EventType == ExchangeEventType.Modified)
             {
                 messages.Add(new CalendarItemMoved
                 {
                     ItemId = it.Id.UniqueId
+                });
+            }
+            else if (ev.EventType == ExchangeEventType.NewMail)
+            {
+                messages.Add(new ItemCreated
+                {
+                    UniqueId = it.Id.UniqueId
                 });
             }
             if (messages.Count > 0)

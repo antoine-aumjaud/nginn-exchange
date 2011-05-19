@@ -79,6 +79,7 @@ namespace Testing
                 if (s.StartsWith(prf))
                     c.AddConnectionString(s.Substring(prf.Length), ConfigurationManager.AppSettings[s]);
             }
+            c.AddMessageHandlersFromAssembly(typeof(Program).Assembly);
             c.SetEndpoint(ConfigurationManager.AppSettings["NGinnMessageBus.Endpoint"])
                 .FinishConfiguration()
                 .StartMessageBus();
