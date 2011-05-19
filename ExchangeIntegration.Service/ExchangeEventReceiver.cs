@@ -49,8 +49,8 @@ namespace ExchangeIntegration.Service
                     return;
                 log.Info("Starting event polling thread");
                 _stop = false;
-                _pollingThread = new Thread(new ThreadStart(this.EventPollingThread));
-                _pollingThread.Start();
+                //_pollingThread = new Thread(new ThreadStart(this.EventPollingThread));
+                //_pollingThread.Start();
             }
         }
 
@@ -249,6 +249,7 @@ namespace ExchangeIntegration.Service
         protected void HandleItemEvent(BaseExchangeEvent ev, SubscriptionEventNotification n, ExchangeService es)
         {
             Item it = Item.Bind(es, new ItemId(ev.ItemId));
+            
             log.Info("Item event: {0}. Item class: {1} ({3}), Id: {2}", ev.EventType, it.ItemClass, it.Id, it.GetType().Name);
             List<object> messages = new List<object>();
             if (ev.EventType == ExchangeEventType.Created)

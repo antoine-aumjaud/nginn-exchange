@@ -39,6 +39,14 @@ namespace ExchangeIntegration.Interfaces
     }
 
     /// <summary>
+    /// notification that a subscription has been re-created
+    /// </summary>
+    public class SubscriptionRecreated : SubscriptionCreated
+    {
+        public string NewSubscriptionId { get; set; }
+    }
+
+    /// <summary>
     /// Remove a subscription
     /// Fill either the AccountName and SubscriptionAlias or SubscriptionId
     /// </summary>

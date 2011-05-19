@@ -101,6 +101,8 @@ namespace ExchangeIntegration.Service
                 .StartMessageBus();
             log.Info("Message bus started");
 
+            _container.Resolve<ISubscriptionManager>();
+
             /*if (!string.IsNullOrEmpty(pushReceiverUrl))
             {
                 log.Info("Creating WCF push receiver host at {0}", pushReceiverUrl);
