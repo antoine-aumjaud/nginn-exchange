@@ -45,8 +45,7 @@ namespace ExchangeIntegration.Service
 
         public ItemCreated CreateCalendarItem(CreateCalendarItem message)
         {
-            ExchangeService es = Connect();
-            es.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, message.ImpersonateUser);
+            ExchangeService es = ConnectAndImpersonate(message.ImpersonateUser);
             Appointment app = new Appointment(es);
             log.Info("Created appointment, item Id: {0}", app.Id);
             foreach (string r in message.Recipients)
@@ -118,6 +117,17 @@ namespace ExchangeIntegration.Service
                 var em = it as EmailMessage;
                 em.Reply(ToBody(msg.Body), msg.ReplyAll);
             }
+        }
+
+
+        private BaseItem GetItem(Item it)
+        {
+            var bi = new BaseItem();
+            EmailMessage em;
+            Task tsk;
+            Appointment app;
+
+            return bi;
         }
 
         public ItemCreated SendEmail(SendEmailMessage msg)

@@ -11,7 +11,8 @@ namespace ExchangeIntegration.Service
         IMessageConsumer<CreateCalendarItem>,
         IMessageConsumer<SendEmailMessage>,
         IMessageConsumer<AddSubscription>,
-        IMessageConsumer<ReplyToMessage>
+        IMessageConsumer<ReplyToMessage>,
+        IMessageConsumer<DeleteItem>
     {
         public IMessageBus MessageBus { get; set; }
         public IExchangeIntegrationService Exchange { get; set; }
@@ -43,6 +44,11 @@ namespace ExchangeIntegration.Service
         public void Handle(ReplyToMessage message)
         {
             this.Exchange.ReplyToMessage(message);
+        }
+
+        public void Handle(DeleteItem message)
+        {
+            Exchange.DeleteItem(message.ItemId);
         }
     }
 }

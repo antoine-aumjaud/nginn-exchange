@@ -18,6 +18,7 @@ namespace ExchangeIntegration.Service
         public string EWSUrl { get; set; }
         public IMessageBus MessageBus { get; set; }
         public IExchangeIntegrationService ExchangeIntegration { get; set; }
+        
         public string EWSUser { get; set; }
         public string EWSPassword { get; set; }
         public TimeSpan PollingInterval { get; set; }
@@ -277,6 +278,7 @@ namespace ExchangeIntegration.Service
                 {
                     UniqueId = it.Id.UniqueId
                 });
+                
             }
             if (messages.Count > 0)
             {

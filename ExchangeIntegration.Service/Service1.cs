@@ -88,7 +88,16 @@ namespace ExchangeIntegration.Service
                 if (s.StartsWith(prf))
                     c.AddConnectionString(s.Substring(prf.Length), ConfigurationManager.AppSettings[s]);
             }
-
+            _container.Register(Component.For<NGinnBPM.MessageBus.Impl.IStartableService>()
+                .ImplementedBy<PollingEmailReceiver>().LifeStyle.Singleton
+                .DependsOn(new
+                {
+                    User = ConfigurationManager.AppSettings["EWSUser"],
+                    Password = ConfigurationManager.AppSettings["EWSPassword"],
+                    EWSUrl = ConfigurationManager.AppSettings["EWSUrl"],
+                    IncomingFolder = "Inbox",
+                    MoveToFolder = "Inbox/Zjedzone"
+                }));
             if (!string.IsNullOrEmpty(httplistener))
                 c.ConfigureHttpReceiver(httplistener);
 
@@ -111,6 +120,7 @@ namespace ExchangeIntegration.Service
                 _pushReceiverHost = new ServiceHost(_container.Resolve<WcfExchangePushNotificationReceiver>(), new Uri(pushReceiverUrl));
                 _pushReceiverHost.Open();
             }*/
+            
         }
 
         protected override void OnStop()

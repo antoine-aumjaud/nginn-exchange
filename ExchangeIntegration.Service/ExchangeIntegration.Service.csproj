@@ -84,12 +84,14 @@
     <Compile Include="Dao\PushSubscriptionStatus.cs" />
     <Compile Include="DBConnectionFactory.cs" />
     <Compile Include="EWS\schemas.microsoft.com.exchange.services.2006.messages.cs" />
+    <Compile Include="ExchangeConnect.cs" />
     <Compile Include="ExchangeEventReceiver.cs" />
     <Compile Include="ExchangeEvents.cs" />
     <Compile Include="ExchangeIntegrationService.cs" />
     <Compile Include="IExchangeIntegrationService.cs" />
     <Compile Include="ISubscriptionManager.cs" />
     <Compile Include="MessageHandler.cs" />
+    <Compile Include="PollingEmailReceiver.cs" />
     <Compile Include="PushSubscriptionManager.cs" />
     <Compile Include="PushSubscriptionReceiverServlet.cs" />
     <Compile Include="Service1.cs">
